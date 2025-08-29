@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-(0o^ydoavh(d$*nfd!egggk^-17@^9p!u@k&14)a6tsr^vt0%+
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'travel-booking-geov.onrender.com',
+    'travel-booking-1-geov.onrender.com',
 ]
 
 
