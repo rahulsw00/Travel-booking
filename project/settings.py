@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'travel-booking-1-geov.onrender.com',
-    'https://travel-booking-1-u97q.onrender.com',
+    'travel-booking-1-u97q.onrender.com',
 ]
 
 
@@ -127,3 +127,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 LOGOUT_REDIRECT_URL = "/"
+
