@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link
+      href="https://cdn.boxicons.com/fonts/basic/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Profile</title>
+  </head>
+  <body class="bg-gray-400">
+    {% if user.is_authenticated %}
+    <!-- Navbar -->
+    <div class="py-5 px-8 flex justify-between items-center bg-blue-400">
+      <a href="{% url 'index' %}" class="font-semibold text-2xl">LOGO</a>
+      <!-- Button for sidebar -->
+      <button id="menu-btn" class="block text-gray-700 focus:outline-none">
+        <!-- Hamburger icon -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Sidebar -->
+    <div
+      id="sidebar"
+      class="fixed top-0 right-0 h-full w-64 shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out bg-white"
+    >
+      <div class="py-5 px-8 flex justify-between items-center">
+        <h2 class="text-lg font-semibold">Menu</h2>
+        <!-- Close button -->
+        <button id="close-btn" class="text-gray-600">✕</button>
+      </div>
+      <ul class="p-4 space-y-4">
+        <li>
+          <a
+            href="{% url 'editProfile' user.id %}"
+            class="block text-gray-700 hover:text-blue-500"
+            >Edit Profile</a
+          >
+        </li>
+        <li>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button class="block text-gray-700 hover:text-blue-500">
+              Logout
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    <div class="w-screen flex justify-center mt-5">
+      <div
+        class="w-[300px] lg:w-[800px] md:w-[600px] sm:w-[500px] bg-white rounded p-5"
+      >
+        <p class="text-2xl border-b pb-4">{{user.username}}</p>
+        <p class="text-xl font-semibold py-4">Bookings</p>
+        {% for booking in bookings %} {% if cancel and booking.id == id %}
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+        >
+          <div class="flex p-5 bg-white rounded w-sm flex-col gap-5">
+            <p class="text-center font-semibold text-xl">
+              Are you sure you want to cancel?
+            </p>
+            <div class="flex gap-3 justify-center">
+              <a
+                href="{% url 'cancel' booking.id %}"
+                class="bg-red-500 text-white px-4 py-1 rounded"
+                >Yes</a
+              >
+              <a
+                href="{% url 'profile' %}"
+                class="bg-gray-500 text-white px-4 py-1 rounded"
+                >No</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div
+          class="flex flex-row w-full bg-[#8ed0fc] rounded p-4 text-xl items-center my-2"
+        >
+          <p class="w-[50%]">
+            {{booking.travelOption.source.name}} to
+            {{booking.travelOption.destination.name}} by
+            {{booking.travelOption.travelType}}
+          </p>
+          <div class="flex flex-row items-center w-[35%]">
+            <i class="bxr bx-rupee text-green-600"></i>
+            <p>{{booking.totalPrice}}</p>
+          </div>
+          <a
+            href="{% url 'confirmCancel' booking.id %}"
+            class="bg-red-300 px-4 py-3 mx-auto rounded"
+            >Cancel</a
+          >
+        </div>
+        {%endfor %}
+      </div>
+      <!--prettier-ignore-->
+    </div>
+
+    {% else %}
+    <div
+      class="flex flex-col sm:flex-row bg-blue-400 py-5 px-8 items-center justify-between"
+    >
+      <p class="font-semibold text-2xl">LOGO</p>
+    </div>
+
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm"
+    >
+      <div class="flex p-5 bg-white rounded w-sm flex-col gap-5">
+        <p class="text-center font-semibold text-2xl">You are not logged in</p>
+        <div class="flex gap-3 justify-center">
+          <a href="{% url 'login' %} " class="bg-blue-400 px-6 py-2 rounded"
+            >Log in</a
+          >
+        </div>
+      </div>
+    </div>
+
+    {% endif %}
+  </body>
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const closeBtn = document.getElementById("close-btn");
+    const sidebar = document.getElementById("sidebar");
+
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.remove("translate-x-full");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      sidebar.classList.add("translate-x-full");
+    });
+  </script>
+</html>
